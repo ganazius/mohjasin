@@ -1,16 +1,25 @@
 <?php
-// deklarasi parameter koneksi database
-$host     = "localhost"; 			// server database, default “localhost” atau “127.0.0.1”
-$username = "00"; 				// username database, default “root”
-$password = "00*"; 					// password database, default kosong
-$database = "00"; 			// memilih database yang akan digunakan
+/**
+ * Koneksi database terpusat.
+ *
+ * Set variabel berikut di environment server:
+ * DB_HOST, DB_USER, DB_PASS, DB_NAME.
+ */
+mysqli_report(MYSQLI_REPORT_OFF);
 
-// buat koneksi database
+$host = getenv('DB_HOST') ?: '127.0.0.1';
+$username = getenv('DB_USER') ?: 'root';
+$password = getenv('DB_PASS') ?: '';
+$database = getenv('DB_NAME') ?: 'mohjasin_dulur';
+
 $mysqli = mysqli_connect($host, $username, $password, $database);
 
-// cek koneksi
-// jika koneksi gagal 
 if (!$mysqli) {
-	// tampilkan pesan gagal koneksi
-	die('Koneksi Database Gagal : ' . mysqli_connect_error());
+    error_log('Database connection failed: ' . mysqli_connect_error());
+    http_response_code(503);
+    exit('Layanan database sedang tidak tersedia.');
+}
+
+if (!mysqli_set_charset($mysqli, 'utf8mb4')) {
+    error_log('Unable to set database charset: ' . mysqli_error($mysqli));
 }

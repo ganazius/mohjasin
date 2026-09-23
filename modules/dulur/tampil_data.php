@@ -81,13 +81,19 @@ if (isset($_GET['pesan'])) {
     */
     // cek data "paginasi" pada URL untuk mengetahui paginasi halaman aktif
     // jika data "paginasi" ada, maka paginasi halaman = data "paginasi". jika data "paginasi" tidak ada, maka paginasi halaman = 1
-    $paginasi_halaman = (isset($_GET['paginasi'])) ? (int) $_GET['paginasi'] : 1;
+    $paginasi_halaman = max(1, (isset($_GET['paginasi'])) ? (int) $_GET['paginasi'] : 1);
     // tentukan jumlah data yang ditampilkan per paginasi halaman
     
     $batas = 8;
     
     // tentukan dari data ke berapa yang akan ditampilkan pada paginasi halaman
     $batas_awal = ($paginasi_halaman - 1) * $batas;
+
+    // Hitung total secara langsung dan ambil hanya data di halaman aktif.
+    $count_query = mysqli_query($mysqli, "SELECT COUNT(*) AS jumlah FROM tbl_dulur")
+                    or die('Ada kesalahan pada query jumlah data : ' . mysqli_error($mysqli));
+    $jumlah_data = (int) mysqli_fetch_assoc($count_query)['jumlah'];
+    $jumlah_paginasi_halaman = (int) ceil($jumlah_data / $batas);
 
     // sql statement untuk menampilkan data dari tabel "tbl_dulur"
     $query = mysqli_query($mysqli, "SELECT id_dulur, nama_lengkap, foto_profil, meninggal FROM tbl_dulur 
@@ -113,7 +119,7 @@ if ($meninggal == "1"){
 }
 ?>
                     <div class="foto-profil mb-4 container-gambar">
-                        <img src="images/<?php echo $data['foto_profil']; ?>" alt="Foto Profil" class="img-fluid rounded-circle">
+                        <img src="images/<?php echo $data['foto_profil']; ?>" alt="Foto Profil" class="img-fluid rounded-circle" loading="lazy" decoding="async">
 <?php
 $meninggal = $data['meninggal'];
 if ($meninggal == "1"){
@@ -136,15 +142,6 @@ if ($meninggal == "1"){
             <!-- menampilkan informasi jumlah paginasi halaman dan jumlah data -->
             <div class="flex-grow-1 text-center text-xl-start text-muted mb-3">
                 <?php
-                // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur"
-                $query = mysqli_query($mysqli, "SELECT id_dulur FROM tbl_dulur")
-                                                or die('Ada kesalahan pada query jumlah data : ' . mysqli_error($mysqli));
-                // ambil jumlah data dari hasil query
-                $jumlah_data = mysqli_num_rows($query);
-
-                // hitung jumlah paginasi halaman yang tersedia
-                $jumlah_paginasi_halaman = ceil($jumlah_data / $batas);
-
                 // cek jumlah data
                 // jika data ada
                 if ($jumlah_data <> 0) {
@@ -163,11 +160,8 @@ if ($meninggal == "1"){
                 */
                 $data_awal = ($jumlah_paginasi_halaman <> 0) ? $batas_awal + 1 : $batas_awal;
 
-                // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" yang ditampilkan per halaman
-                $query = mysqli_query($mysqli, "SELECT id_dulur FROM tbl_dulur LIMIT $data_awal, $batas")
-                                                or die('Ada kesalahan pada query jumlah data per halaman : ' . mysqli_error($mysqli));
-                // ambil jumlah data dari hasil query
-                $jumlah_data_per_paginasi_halaman = mysqli_num_rows($query);
+                // Jumlah data pada halaman aktif sudah tersedia dari query daftar.
+                $jumlah_data_per_paginasi_halaman = $rows;
 
                 // ambil data akhir yang ditampilkan per paginasi halaman
                 /* 

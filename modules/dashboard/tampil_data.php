@@ -1,3 +1,13 @@
+<?php
+// Ambil seluruh statistik bani dalam satu query agar dashboard tidak menjalankan
+// satu query COUNT untuk setiap kartu statistik.
+$bani_counts = [];
+$stats_query = mysqli_query($mysqli, "SELECT bani, COUNT(*) AS jumlah FROM tbl_dulur GROUP BY bani")
+    or die('Ada kesalahan pada query statistik dashboard : ' . mysqli_error($mysqli));
+while ($stats = mysqli_fetch_assoc($stats_query)) {
+    $bani_counts[(string) $stats['bani']] = (int) $stats['jumlah'];
+}
+?>
 <div class="d-flex flex-column flex-lg-row mb-4">
     <!-- judul halaman -->
     <div class="flex-grow-1 d-flex align-items-center">
@@ -43,15 +53,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI MUSAMAH</p>
                   <p class="text-muted mb-1">SULAEMAN</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='1'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['1'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -70,15 +72,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI Hj. CALIMAH</p>
                   <p class="text-muted mb-1">H. KOSIM</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='2'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['2'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -97,15 +91,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI H. ALI IRFAN</p>
                   <p class="text-muted mb-1">ROHMATUN</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='3'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['3'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -124,15 +110,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI H. MOH. ROSYAD</p>
                   <p class="text-muted mb-1">Hj. TASLIMAH</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='4'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['4'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -151,15 +129,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI DJUDIAH</p>
                   <p class="text-muted mb-1">FAUZAN</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='5'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['5'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -178,15 +148,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI MOH. CHOLIL</p>
                   <p class="text-muted mb-1">MARIYATOEN</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='6A'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['6A'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -205,15 +167,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI MOH. CHOLIL</p>
                   <p class="text-muted mb-1">MUCHANAH</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='6B'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['6B'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -232,15 +186,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI MOH. CHOLIL</p>
                   <p class="text-muted mb-1">SITI SODIQOH</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='6C'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['6C'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -259,15 +205,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI H. ACHMAD ZEIN</p>
                   <p class="text-muted mb-1">Hj. ROFI'AH</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='7'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['7'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -286,15 +224,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI H. ACHMAD</p>
                   <p class="text-muted mb-1">Hj. CHAMIDAH</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='8'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['8'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
@@ -313,15 +243,7 @@ text-decoration: none;
                 <div>
                     <p class="text-muted mb-1">BANI Hj. MAIMUNATUN</p>
                   <p class="text-muted mb-1">H. MOH. MUSTARI</p>
-                    <?php
-                    // sql statement untuk menampilkan jumlah data pada tabel "tbl_dulur" berdasarkan "jenis_dulur"
-                    $query = mysqli_query($mysqli, "SELECT COUNT(id_dulur) as jumlah FROM tbl_dulur WHERE bani='9'")
-                                                    or die('Ada kesalahan pada query jumlah data dulur : ' . mysqli_error($mysqli));
-                    // ambil data hasil query
-                    $data = mysqli_fetch_assoc($query);
-                    // buat variabel untuk menampilkan data
-                    $jumlah_dulur = $data['jumlah'];
-                    ?>
+                    <?php $jumlah_dulur = $bani_counts['9'] ?? 0; ?>
                     <!-- tampilkan data -->
                     <h5 class="fw-bold mb-0"><?php echo number_format($jumlah_dulur, 0, '', '.'); ?></h5>
                 </div>
